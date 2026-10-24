@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala Segurança Metrô SP</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="mainTitle">Escala Segurança Metrô SP - <span id="displayYear">2026</span></h1>
+    <p style="text-align: center;">Escala 4x2x4 (4 manhãs, 2 noites, 4 folgas)</p>
+    <div class="controls" style="text-align:center; margin-bottom:12px;">
+        <label for="yearSelect">Ano: </label>
+        <select id="yearSelect" aria-label="Selecionar ano"></select>
+    </div>
+    
+    <div class="info">
+        <p><strong>Padrão inicial confirmado:</strong></p>
+        <p>26/05 a 29/05: Manhãs (4 dias) | 30/05 a 31/05: Noites (2 dias) | 01/06 a 04/06: Folgas (4 dias)</p>
+    </div>
+    
+    <div class="legend">
+        <div class="legend-item">
+          <div class="legend-color" style="background-color: #ffd8a8; border: 1px solid #ffc078;"></div>
+          <span>Manhã</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background-color: #a5d8ff; border: 1px solid #74c0fc;"></div>
+            <span>Noite</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #d3f9d8; border: 1px solid #b2f2bb;"></div>
+            <span>Folga</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: white;"></div>
+            <span>Feriado</span>
+            <span style="color: red; font-weight: bold;">F</span>
+        </div>
+    </div>
+    
+    <div class="calendar-container" id="calendar">
+        <!-- O calendário será gerado pelo JavaScript -->
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
