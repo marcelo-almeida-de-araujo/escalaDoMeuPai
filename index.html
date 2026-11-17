@@ -4,126 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escala Segurança Metrô SP</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Gerado pelo Tailwind CLI a partir de src/input.css (npm run build) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="min-h-screen bg-slate-100 font-sans text-slate-800 antialiased">
+<body class="bg-body-tertiary">
     <!-- Cabeçalho -->
-    <header class="bg-gradient-to-br from-metro-700 via-metro-600 to-metro-500 text-white shadow-lg">
-        <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
-            <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+    <header class="app-header text-white shadow">
+        <div class="container-xl py-4 py-md-5">
+            <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-4">
                 <div>
-                    <p class="mb-2 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider ring-1 ring-white/25">
-                        <span class="h-2 w-2 rounded-full bg-emerald-300"></span>
-                        Escala 4x2x4
-                    </p>
-                    <h1 id="mainTitle" class="text-3xl font-extrabold tracking-tight sm:text-4xl">
+                    <span class="badge rounded-pill text-bg-light bg-opacity-25 text-white border border-light border-opacity-25 mb-2 text-uppercase">
+                        <i class="bi bi-circle-fill text-success me-1 small"></i> Escala 4x2x4
+                    </span>
+                    <h1 id="mainTitle" class="fw-bold mb-1">
                         Escala Segurança Metrô SP
-                        <span class="text-metro-100">·</span>
-                        <span id="displayYear" class="text-amber-300">2026</span>
+                        <span class="opacity-50">·</span>
+                        <span id="displayYear" class="text-warning">2026</span>
                     </h1>
-                    <p class="mt-2 text-sm text-metro-100 sm:text-base">4 manhãs, 2 noites e 4 folgas em ciclo contínuo</p>
+                    <p class="mb-0 text-white-50">4 manhãs, 2 noites e 4 folgas em ciclo contínuo</p>
                 </div>
 
                 <!-- Seletor de ano -->
-                <div class="no-print flex items-center gap-2 self-start rounded-2xl bg-white/10 p-1.5 ring-1 ring-white/20 backdrop-blur md:self-auto">
-                    <button id="prevYear" type="button" aria-label="Ano anterior"
-                        class="grid h-10 w-10 place-items-center rounded-xl text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:cursor-not-allowed disabled:opacity-40">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                <div class="no-print d-flex align-items-center gap-2 year-picker p-2 rounded-4">
+                    <button id="prevYear" type="button" class="btn btn-link text-white" aria-label="Ano anterior">
+                        <i class="bi bi-chevron-left"></i>
                     </button>
-                    <label for="yearSelect" class="sr-only">Ano</label>
-                    <select id="yearSelect" aria-label="Selecionar ano"
-                        class="h-10 cursor-pointer rounded-xl border-0 bg-white px-4 text-base font-bold text-metro-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-300"></select>
-                    <button id="nextYear" type="button" aria-label="Próximo ano"
-                        class="grid h-10 w-10 place-items-center rounded-xl text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:cursor-not-allowed disabled:opacity-40">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    <label for="yearSelect" class="visually-hidden">Ano</label>
+                    <select id="yearSelect" class="form-select fw-bold" aria-label="Selecionar ano"></select>
+                    <button id="nextYear" type="button" class="btn btn-link text-white" aria-label="Próximo ano">
+                        <i class="bi bi-chevron-right"></i>
                     </button>
-                    <button id="todayBtn" type="button"
-                        class="ml-1 h-10 rounded-xl bg-amber-300 px-4 text-sm font-semibold text-metro-900 shadow-sm transition hover:bg-amber-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white">
-                        Hoje
-                    </button>
+                    <button id="todayBtn" type="button" class="btn btn-warning fw-semibold">Hoje</button>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+    <main class="container-xl py-4">
         <!-- Resumo -->
-        <section class="mb-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5" aria-label="Resumo do ano">
-            <div id="todayCard" class="col-span-2 flex items-center gap-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 lg:col-span-1">
-                <div id="todayIcon" class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-slate-100 text-2xl">📅</div>
-                <div class="min-w-0">
-                    <p class="text-xs font-medium uppercase tracking-wide text-slate-500">Hoje</p>
-                    <p id="todayLabel" class="truncate text-lg font-bold text-slate-900">—</p>
-                    <p id="todayDate" class="text-xs text-slate-500"></p>
+        <section class="row g-3 mb-4" aria-label="Resumo do ano">
+            <div class="col-12 col-lg">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div id="todayIcon" class="stat-icon">📅</div>
+                        <div>
+                            <div class="small text-uppercase text-body-secondary fw-medium">Hoje</div>
+                            <div id="todayLabel" class="fs-5 fw-bold">—</div>
+                            <div id="todayDate" class="small text-body-secondary"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
-                <div class="flex items-center gap-2 text-sm font-medium text-orange-700">
-                    <span class="h-2.5 w-2.5 rounded-full bg-orange-400"></span> Manhãs
+            <div class="col-6 col-lg">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="small fw-medium text-morning"><i class="bi bi-sun-fill me-1"></i>Manhãs</div>
+                        <div id="countMorning" class="display-6 fw-bold">0</div>
+                    </div>
                 </div>
-                <p id="countMorning" class="mt-1 text-3xl font-extrabold text-slate-900">0</p>
             </div>
-            <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
-                <div class="flex items-center gap-2 text-sm font-medium text-sky-700">
-                    <span class="h-2.5 w-2.5 rounded-full bg-sky-500"></span> Noites
+            <div class="col-6 col-lg">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="small fw-medium text-night"><i class="bi bi-moon-stars-fill me-1"></i>Noites</div>
+                        <div id="countNight" class="display-6 fw-bold">0</div>
+                    </div>
                 </div>
-                <p id="countNight" class="mt-1 text-3xl font-extrabold text-slate-900">0</p>
             </div>
-            <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
-                <div class="flex items-center gap-2 text-sm font-medium text-emerald-700">
-                    <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span> Folgas
+            <div class="col-6 col-lg">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="small fw-medium text-off"><i class="bi bi-tree-fill me-1"></i>Folgas</div>
+                        <div id="countOff" class="display-6 fw-bold">0</div>
+                    </div>
                 </div>
-                <p id="countOff" class="mt-1 text-3xl font-extrabold text-slate-900">0</p>
             </div>
-            <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
-                <div class="flex items-center gap-2 text-sm font-medium text-rose-700">
-                    <span class="h-2.5 w-2.5 rounded-full bg-rose-500"></span> Feriados trabalhados
+            <div class="col-6 col-lg">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="small fw-medium text-danger"><i class="bi bi-flag-fill me-1"></i>Feriados trabalhados</div>
+                        <div id="countHolidayWork" class="display-6 fw-bold">0</div>
+                    </div>
                 </div>
-                <p id="countHolidayWork" class="mt-1 text-3xl font-extrabold text-slate-900">0</p>
             </div>
         </section>
 
         <!-- Info + legenda -->
-        <section class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-stretch">
-            <div class="flex-1 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-                <p class="mb-1 flex items-center gap-2 font-semibold">
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Padrão inicial confirmado
-                </p>
-                <p class="leading-relaxed">
-                    <span class="font-medium">26/05 a 29/05:</span> Manhãs (4 dias)
-                    <span class="mx-1 text-amber-400">|</span>
-                    <span class="font-medium">30/05 a 31/05:</span> Noites (2 dias)
-                    <span class="mx-1 text-amber-400">|</span>
-                    <span class="font-medium">01/06 a 04/06:</span> Folgas (4 dias)
-                </p>
+        <section class="row g-3 mb-4">
+            <div class="col-lg-7">
+                <div class="alert alert-warning h-100 mb-0" role="note">
+                    <div class="fw-semibold mb-1"><i class="bi bi-info-circle me-1"></i>Padrão inicial confirmado</div>
+                    <span class="fw-medium">26/05 a 29/05:</span> Manhãs (4 dias)
+                    <span class="mx-1 opacity-50">|</span>
+                    <span class="fw-medium">30/05 a 31/05:</span> Noites (2 dias)
+                    <span class="mx-1 opacity-50">|</span>
+                    <span class="fw-medium">01/06 a 04/06:</span> Folgas (4 dias)
+                </div>
             </div>
-
-            <div class="flex flex-wrap items-center justify-center gap-2 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 lg:justify-start">
-                <span class="inline-flex items-center gap-2 rounded-full bg-orange-100 px-3 py-1.5 text-sm font-medium text-orange-800 ring-1 ring-orange-200">☀️ Manhã</span>
-                <span class="inline-flex items-center gap-2 rounded-full bg-sky-100 px-3 py-1.5 text-sm font-medium text-sky-800 ring-1 ring-sky-200">🌙 Noite</span>
-                <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1.5 text-sm font-medium text-emerald-800 ring-1 ring-emerald-200">🌿 Folga</span>
-                <span class="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-slate-700 ring-1 ring-slate-200">
-                    <span class="grid h-4 w-4 place-items-center rounded-full bg-rose-500 text-[10px] font-bold text-white">F</span> Feriado
-                </span>
-                <span class="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-slate-700 ring-1 ring-slate-200">
-                    <span class="h-4 w-4 rounded-md ring-2 ring-metro-500"></span> Hoje
-                </span>
+            <div class="col-lg-5">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body d-flex flex-wrap align-items-center justify-content-center gap-2">
+                        <span class="legend-chip shift-morning"><i class="bi bi-sun-fill"></i> Manhã</span>
+                        <span class="legend-chip shift-night"><i class="bi bi-moon-stars-fill"></i> Noite</span>
+                        <span class="legend-chip shift-off"><i class="bi bi-tree-fill"></i> Folga</span>
+                        <span class="legend-chip border"><span class="holiday-dot">F</span> Feriado</span>
+                        <span class="legend-chip border"><span class="today-swatch"></span> Hoje</span>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- Calendário -->
-        <div id="calendar" class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div id="calendar" class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3">
             <!-- O calendário será gerado pelo JavaScript -->
         </div>
     </main>
 
-    <footer class="no-print py-8 text-center text-xs text-slate-400">
-        Passe o mouse sobre um dia marcado com <span class="font-semibold text-rose-500">F</span> para ver o nome do feriado.
+    <footer class="no-print py-4 text-center small text-body-secondary">
+        Passe o mouse sobre um dia marcado com <span class="fw-semibold text-danger">F</span> para ver o nome do feriado.
     </footer>
 
     <script src="script.js"></script>

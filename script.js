@@ -69,11 +69,11 @@ const months = [
 // Dias da semana
 const weekdays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
-// Estilos (Tailwind) por tipo de turno
+// Rótulo, ícone e classe CSS (styles.css) por tipo de turno
 const shiftStyles = {
-    morning: { label: 'Manhã', icon: '☀️', base: 'bg-orange-100 text-orange-900 ring-1 ring-inset ring-orange-200', hover: 'hover:bg-orange-200' },
-    night:   { label: 'Noite', icon: '🌙', base: 'bg-sky-100 text-sky-900 ring-1 ring-inset ring-sky-200', hover: 'hover:bg-sky-200' },
-    off:     { label: 'Folga', icon: '🌿', base: 'bg-emerald-100 text-emerald-900 ring-1 ring-inset ring-emerald-200', hover: 'hover:bg-emerald-200' }
+    morning: { label: 'Manhã', icon: '☀️', cls: 'shift-morning' },
+    night:   { label: 'Noite', icon: '🌙', cls: 'shift-night' },
+    off:     { label: 'Folga', icon: '🌿', cls: 'shift-off' }
 };
 
 // Padrão da escala: 4 manhãs, 2 noites, 4 folgas
@@ -101,29 +101,33 @@ function createCalendar(targetYear = 2026) {
     for (let month = 0; month < 12; month++) {
         const isCurrentMonth = today.getFullYear() === targetYear && today.getMonth() === month;
 
+        // Coluna do grid do Bootstrap + cartão do mês
+        const col = document.createElement('div');
+        col.className = 'col';
+
         const monthDiv = document.createElement('article');
-        monthDiv.className = 'rounded-2xl bg-white p-4 shadow-sm transition hover:shadow-md ' +
-            (isCurrentMonth ? 'ring-2 ring-metro-500' : 'ring-1 ring-slate-200');
-        if (isCurrentMonth) monthDiv.id = 'currentMonth';
+        monthDiv.className = 'card month-card h-100 border-0 shadow-sm p-3' + (isCurrentMonth ? ' current' : '');
+        if (isCurrentMonth) col.id = 'currentMonth';
+        col.appendChild(monthDiv);
 
         const monthTitle = document.createElement('h2');
-        monthTitle.className = 'mb-3 flex items-center justify-between text-base font-bold text-slate-900';
+        monthTitle.className = 'h6 fw-bold mb-3 d-flex align-items-center justify-content-between';
         monthTitle.innerHTML = `<span>${months[month]}</span>` +
-            (isCurrentMonth ? '<span class="rounded-full bg-metro-50 px-2 py-0.5 text-[11px] font-semibold text-metro-600">Mês atual</span>' : '');
+            (isCurrentMonth ? '<span class="badge rounded-pill text-bg-primary">Mês atual</span>' : '');
         monthDiv.appendChild(monthTitle);
 
         const daysHeader = document.createElement('div');
-        daysHeader.className = 'mb-1 grid grid-cols-7 text-center text-[11px] font-semibold uppercase tracking-wide';
+        daysHeader.className = 'week-header';
         weekdays.forEach((day, i) => {
             const dayHeader = document.createElement('div');
-            dayHeader.className = (i === 0 || i === 6) ? 'text-rose-400' : 'text-slate-400';
+            if (i === 0 || i === 6) dayHeader.className = 'weekend';
             dayHeader.textContent = day;
             daysHeader.appendChild(dayHeader);
         });
         monthDiv.appendChild(daysHeader);
 
         const daysGrid = document.createElement('div');
-        daysGrid.className = 'grid grid-cols-7 gap-1';
+        daysGrid.className = 'days-grid';
 
         const firstDay = new Date(targetYear, month, 1).getDay();
         const daysInMonth = new Date(targetYear, month + 1, 0).getDate();
@@ -144,15 +148,14 @@ function createCalendar(targetYear = 2026) {
             if (isHoliday && shift !== 'off') counts.holidayWork++;
 
             const dayDiv = document.createElement('div');
-            dayDiv.className = `relative flex aspect-square cursor-default items-center justify-center rounded-lg text-sm font-medium tabular-nums transition ${style.base} ${style.hover}` +
-                (isToday ? ' z-10 scale-110 font-extrabold shadow-md outline-2 outline-offset-1 outline-metro-500' : '');
+            dayDiv.className = `day ${style.cls}` + (isToday ? ' today' : '');
             dayDiv.textContent = day;
 
             let title = `${dateStr} · ${style.label}`;
             if (isHoliday) {
                 title += ` · ${getHolidayName(dateStr)}`;
                 const badge = document.createElement('span');
-                badge.className = 'absolute -right-1 -top-1 grid h-4 w-4 place-items-center rounded-full bg-rose-500 text-[9px] font-bold text-white shadow ring-2 ring-white';
+                badge.className = 'holiday-badge';
                 badge.textContent = 'F';
                 dayDiv.appendChild(badge);
             }
@@ -163,7 +166,7 @@ function createCalendar(targetYear = 2026) {
         }
 
         monthDiv.appendChild(daysGrid);
-        calendarContainer.appendChild(monthDiv);
+        calendarContainer.appendChild(col);
     }
 
     document.getElementById('countMorning').textContent = counts.morning;
@@ -181,7 +184,7 @@ function updateTodayCard() {
 
     const icon = document.getElementById('todayIcon');
     icon.textContent = style.icon;
-    icon.className = `grid h-12 w-12 shrink-0 place-items-center rounded-xl text-2xl ${style.base}`;
+    icon.className = `stat-icon ${style.cls}`;
     document.getElementById('todayLabel').textContent = style.label;
     document.getElementById('todayDate').textContent = dateStr + (isHoliday ? ` · ${getHolidayName(dateStr)}` : '');
 }
