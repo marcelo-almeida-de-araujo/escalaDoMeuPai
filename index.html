@@ -4,44 +4,141 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escala Segurança Metrô SP</title>
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.11"></script>
+    <style type="text/tailwindcss">
+        @theme {
+            --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            --color-metro-50: #eef4ff;
+            --color-metro-100: #dae6ff;
+            --color-metro-500: #1d4ed8;
+            --color-metro-600: #1e40af;
+            --color-metro-700: #1e3a8a;
+            --color-metro-900: #0f1d4a;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
-    <h1 id="mainTitle">Escala Segurança Metrô SP - <span id="displayYear">2026</span></h1>
-    <p style="text-align: center;">Escala 4x2x4 (4 manhãs, 2 noites, 4 folgas)</p>
-    <div class="controls" style="text-align:center; margin-bottom:12px;">
-        <label for="yearSelect">Ano: </label>
-        <select id="yearSelect" aria-label="Selecionar ano"></select>
-    </div>
-    
-    <div class="info">
-        <p><strong>Padrão inicial confirmado:</strong></p>
-        <p>26/05 a 29/05: Manhãs (4 dias) | 30/05 a 31/05: Noites (2 dias) | 01/06 a 04/06: Folgas (4 dias)</p>
-    </div>
-    
-    <div class="legend">
-        <div class="legend-item">
-          <div class="legend-color" style="background-color: #ffd8a8; border: 1px solid #ffc078;"></div>
-          <span>Manhã</span>
+<body class="min-h-screen bg-slate-100 font-sans text-slate-800 antialiased">
+    <!-- Cabeçalho -->
+    <header class="bg-gradient-to-br from-metro-700 via-metro-600 to-metro-500 text-white shadow-lg">
+        <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
+            <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+                <div>
+                    <p class="mb-2 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider ring-1 ring-white/25">
+                        <span class="h-2 w-2 rounded-full bg-emerald-300"></span>
+                        Escala 4x2x4
+                    </p>
+                    <h1 id="mainTitle" class="text-3xl font-extrabold tracking-tight sm:text-4xl">
+                        Escala Segurança Metrô SP
+                        <span class="text-metro-100">·</span>
+                        <span id="displayYear" class="text-amber-300">2026</span>
+                    </h1>
+                    <p class="mt-2 text-sm text-metro-100 sm:text-base">4 manhãs, 2 noites e 4 folgas em ciclo contínuo</p>
+                </div>
+
+                <!-- Seletor de ano -->
+                <div class="no-print flex items-center gap-2 self-start rounded-2xl bg-white/10 p-1.5 ring-1 ring-white/20 backdrop-blur md:self-auto">
+                    <button id="prevYear" type="button" aria-label="Ano anterior"
+                        class="grid h-10 w-10 place-items-center rounded-xl text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:cursor-not-allowed disabled:opacity-40">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <label for="yearSelect" class="sr-only">Ano</label>
+                    <select id="yearSelect" aria-label="Selecionar ano"
+                        class="h-10 cursor-pointer rounded-xl border-0 bg-white px-4 text-base font-bold text-metro-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-300"></select>
+                    <button id="nextYear" type="button" aria-label="Próximo ano"
+                        class="grid h-10 w-10 place-items-center rounded-xl text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:cursor-not-allowed disabled:opacity-40">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <button id="todayBtn" type="button"
+                        class="ml-1 h-10 rounded-xl bg-amber-300 px-4 text-sm font-semibold text-metro-900 shadow-sm transition hover:bg-amber-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white">
+                        Hoje
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="legend-item">
-          <div class="legend-color" style="background-color: #a5d8ff; border: 1px solid #74c0fc;"></div>
-            <span>Noite</span>
+    </header>
+
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+        <!-- Resumo -->
+        <section class="mb-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5" aria-label="Resumo do ano">
+            <div id="todayCard" class="col-span-2 flex items-center gap-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 lg:col-span-1">
+                <div id="todayIcon" class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-slate-100 text-2xl">📅</div>
+                <div class="min-w-0">
+                    <p class="text-xs font-medium uppercase tracking-wide text-slate-500">Hoje</p>
+                    <p id="todayLabel" class="truncate text-lg font-bold text-slate-900">—</p>
+                    <p id="todayDate" class="text-xs text-slate-500"></p>
+                </div>
+            </div>
+            <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
+                <div class="flex items-center gap-2 text-sm font-medium text-orange-700">
+                    <span class="h-2.5 w-2.5 rounded-full bg-orange-400"></span> Manhãs
+                </div>
+                <p id="countMorning" class="mt-1 text-3xl font-extrabold text-slate-900">0</p>
+            </div>
+            <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
+                <div class="flex items-center gap-2 text-sm font-medium text-sky-700">
+                    <span class="h-2.5 w-2.5 rounded-full bg-sky-500"></span> Noites
+                </div>
+                <p id="countNight" class="mt-1 text-3xl font-extrabold text-slate-900">0</p>
+            </div>
+            <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
+                <div class="flex items-center gap-2 text-sm font-medium text-emerald-700">
+                    <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span> Folgas
+                </div>
+                <p id="countOff" class="mt-1 text-3xl font-extrabold text-slate-900">0</p>
+            </div>
+            <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
+                <div class="flex items-center gap-2 text-sm font-medium text-rose-700">
+                    <span class="h-2.5 w-2.5 rounded-full bg-rose-500"></span> Feriados trabalhados
+                </div>
+                <p id="countHolidayWork" class="mt-1 text-3xl font-extrabold text-slate-900">0</p>
+            </div>
+        </section>
+
+        <!-- Info + legenda -->
+        <section class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-stretch">
+            <div class="flex-1 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                <p class="mb-1 flex items-center gap-2 font-semibold">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Padrão inicial confirmado
+                </p>
+                <p class="leading-relaxed">
+                    <span class="font-medium">26/05 a 29/05:</span> Manhãs (4 dias)
+                    <span class="mx-1 text-amber-400">|</span>
+                    <span class="font-medium">30/05 a 31/05:</span> Noites (2 dias)
+                    <span class="mx-1 text-amber-400">|</span>
+                    <span class="font-medium">01/06 a 04/06:</span> Folgas (4 dias)
+                </p>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-2 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 lg:justify-start">
+                <span class="inline-flex items-center gap-2 rounded-full bg-orange-100 px-3 py-1.5 text-sm font-medium text-orange-800 ring-1 ring-orange-200">☀️ Manhã</span>
+                <span class="inline-flex items-center gap-2 rounded-full bg-sky-100 px-3 py-1.5 text-sm font-medium text-sky-800 ring-1 ring-sky-200">🌙 Noite</span>
+                <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1.5 text-sm font-medium text-emerald-800 ring-1 ring-emerald-200">🌿 Folga</span>
+                <span class="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-slate-700 ring-1 ring-slate-200">
+                    <span class="grid h-4 w-4 place-items-center rounded-full bg-rose-500 text-[10px] font-bold text-white">F</span> Feriado
+                </span>
+                <span class="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-slate-700 ring-1 ring-slate-200">
+                    <span class="h-4 w-4 rounded-md ring-2 ring-metro-500"></span> Hoje
+                </span>
+            </div>
+        </section>
+
+        <!-- Calendário -->
+        <div id="calendar" class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <!-- O calendário será gerado pelo JavaScript -->
         </div>
-        <div class="legend-item">
-            <div class="legend-color" style="background-color: #d3f9d8; border: 1px solid #b2f2bb;"></div>
-            <span>Folga</span>
-        </div>
-        <div class="legend-item">
-            <div class="legend-color" style="background-color: white;"></div>
-            <span>Feriado</span>
-            <span style="color: red; font-weight: bold;">F</span>
-        </div>
-    </div>
-    
-    <div class="calendar-container" id="calendar">
-        <!-- O calendário será gerado pelo JavaScript -->
-    </div>
+    </main>
+
+    <footer class="no-print py-8 text-center text-xs text-slate-400">
+        Passe o mouse sobre um dia marcado com <span class="font-semibold text-rose-500">F</span> para ver o nome do feriado.
+    </footer>
 
     <script src="script.js"></script>
 </body>
