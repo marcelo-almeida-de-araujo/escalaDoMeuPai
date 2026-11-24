@@ -1,23 +1,51 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escala Segurança Metrô SP</title>
+    <!-- Aplica o tema antes de desenhar a página, para não piscar em claro -->
+    <script>
+        (function () {
+            var pref;
+            try { pref = localStorage.getItem('theme'); } catch (e) {}
+            if (pref !== 'light' && pref !== 'dark') pref = 'auto';
+            var dark = pref === 'dark' || (pref === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme-pref', pref);
+        })();
+    </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-body-tertiary">
+<body>
     <!-- Cabeçalho -->
     <header class="app-header text-white shadow">
-        <div class="container-xl py-4 py-md-5">
-            <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-4">
+        <div class="container-xl py-3 py-md-4">
+            <div class="d-flex align-items-center justify-content-between gap-2 mb-3">
+                <span class="header-badge">
+                    <i class="bi bi-circle-fill text-success"></i> Escala 4x2x4
+                </span>
+
+                <!-- Seletor de tema -->
+                <div class="theme-switch no-print" role="radiogroup" aria-label="Tema da página">
+                    <span class="theme-thumb" aria-hidden="true"></span>
+                    <button type="button" role="radio" data-theme-value="light" aria-checked="false" title="Tema claro">
+                        <i class="bi bi-sun-fill"></i><span class="theme-label">Claro</span>
+                    </button>
+                    <button type="button" role="radio" data-theme-value="auto" aria-checked="false" title="Seguir o sistema">
+                        <i class="bi bi-circle-half"></i><span class="theme-label">Auto</span>
+                    </button>
+                    <button type="button" role="radio" data-theme-value="dark" aria-checked="false" title="Tema escuro">
+                        <i class="bi bi-moon-stars-fill"></i><span class="theme-label">Escuro</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-3">
                 <div>
-                    <span class="badge rounded-pill text-bg-light bg-opacity-25 text-white border border-light border-opacity-25 mb-2 text-uppercase">
-                        <i class="bi bi-circle-fill text-success me-1 small"></i> Escala 4x2x4
-                    </span>
-                    <h1 id="mainTitle" class="fw-bold mb-1">
+                    <h1 id="mainTitle" class="app-title fw-bold mb-1">
                         Escala Segurança Metrô SP
                         <span class="opacity-50">·</span>
                         <span id="displayYear" class="text-warning">2026</span>
@@ -26,7 +54,7 @@
                 </div>
 
                 <!-- Seletor de ano -->
-                <div class="no-print d-flex align-items-center gap-2 year-picker p-2 rounded-4">
+                <div class="no-print year-picker d-flex align-items-center gap-1 p-1 rounded-4">
                     <button id="prevYear" type="button" class="btn btn-link text-white" aria-label="Ano anterior">
                         <i class="bi bi-chevron-left"></i>
                     </button>
@@ -35,7 +63,9 @@
                     <button id="nextYear" type="button" class="btn btn-link text-white" aria-label="Próximo ano">
                         <i class="bi bi-chevron-right"></i>
                     </button>
-                    <button id="todayBtn" type="button" class="btn btn-warning fw-semibold">Hoje</button>
+                    <button id="todayBtn" type="button" class="btn btn-warning fw-semibold ms-1">
+                        <i class="bi bi-calendar-check me-1"></i>Hoje
+                    </button>
                 </div>
             </div>
         </div>
@@ -43,63 +73,64 @@
 
     <main class="container-xl py-4">
         <!-- Resumo -->
-        <section class="row g-3 mb-4" aria-label="Resumo do ano">
+        <section class="row g-2 g-md-3 mb-4" aria-label="Resumo do ano">
             <div class="col-12 col-lg">
-                <div class="card h-100 border-0 shadow-sm">
+                <button id="todayCard" type="button" class="card stat-card today-card h-100 w-100 text-start border-0 shadow-sm">
                     <div class="card-body d-flex align-items-center gap-3">
                         <div id="todayIcon" class="stat-icon">📅</div>
-                        <div>
+                        <div class="flex-grow-1 min-w-0">
                             <div class="small text-uppercase text-body-secondary fw-medium">Hoje</div>
                             <div id="todayLabel" class="fs-5 fw-bold">—</div>
-                            <div id="todayDate" class="small text-body-secondary"></div>
+                            <div id="todayDate" class="small text-body-secondary text-truncate"></div>
                         </div>
+                        <i class="bi bi-chevron-right text-body-tertiary"></i>
                     </div>
-                </div>
+                </button>
             </div>
             <div class="col-6 col-lg">
-                <div class="card h-100 border-0 shadow-sm">
+                <div class="card stat-card h-100 border-0 shadow-sm">
                     <div class="card-body">
                         <div class="small fw-medium text-morning"><i class="bi bi-sun-fill me-1"></i>Manhãs</div>
-                        <div id="countMorning" class="display-6 fw-bold">0</div>
+                        <div id="countMorning" class="stat-value">0</div>
                     </div>
                 </div>
             </div>
             <div class="col-6 col-lg">
-                <div class="card h-100 border-0 shadow-sm">
+                <div class="card stat-card h-100 border-0 shadow-sm">
                     <div class="card-body">
                         <div class="small fw-medium text-night"><i class="bi bi-moon-stars-fill me-1"></i>Noites</div>
-                        <div id="countNight" class="display-6 fw-bold">0</div>
+                        <div id="countNight" class="stat-value">0</div>
                     </div>
                 </div>
             </div>
             <div class="col-6 col-lg">
-                <div class="card h-100 border-0 shadow-sm">
+                <div class="card stat-card h-100 border-0 shadow-sm">
                     <div class="card-body">
                         <div class="small fw-medium text-off"><i class="bi bi-tree-fill me-1"></i>Folgas</div>
-                        <div id="countOff" class="display-6 fw-bold">0</div>
+                        <div id="countOff" class="stat-value">0</div>
                     </div>
                 </div>
             </div>
             <div class="col-6 col-lg">
-                <div class="card h-100 border-0 shadow-sm">
+                <div class="card stat-card h-100 border-0 shadow-sm">
                     <div class="card-body">
                         <div class="small fw-medium text-danger"><i class="bi bi-flag-fill me-1"></i>Feriados trabalhados</div>
-                        <div id="countHolidayWork" class="display-6 fw-bold">0</div>
+                        <div id="countHolidayWork" class="stat-value">0</div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Info + legenda -->
-        <section class="row g-3 mb-4">
+        <section class="row g-2 g-md-3 mb-4">
             <div class="col-lg-7">
                 <div class="alert alert-warning h-100 mb-0" role="note">
                     <div class="fw-semibold mb-1"><i class="bi bi-info-circle me-1"></i>Padrão inicial confirmado</div>
-                    <span class="fw-medium">26/05 a 29/05:</span> Manhãs (4 dias)
-                    <span class="mx-1 opacity-50">|</span>
-                    <span class="fw-medium">30/05 a 31/05:</span> Noites (2 dias)
-                    <span class="mx-1 opacity-50">|</span>
-                    <span class="fw-medium">01/06 a 04/06:</span> Folgas (4 dias)
+                    <ul class="pattern-list mb-0">
+                        <li><span class="fw-medium">26/05 a 29/05:</span> Manhãs (4 dias)</li>
+                        <li><span class="fw-medium">30/05 a 31/05:</span> Noites (2 dias)</li>
+                        <li><span class="fw-medium">01/06 a 04/06:</span> Folgas (4 dias)</li>
+                    </ul>
                 </div>
             </div>
             <div class="col-lg-5">
@@ -122,9 +153,33 @@
     </main>
 
     <footer class="no-print py-4 text-center small text-body-secondary">
-        Passe o mouse sobre um dia marcado com <span class="fw-semibold text-danger">F</span> para ver o nome do feriado.
+        <i class="bi bi-hand-index me-1"></i>Toque ou clique em um dia para ver os detalhes.
     </footer>
 
+    <!-- Detalhes do dia -->
+    <div class="modal fade" id="dayModal" tabindex="-1" aria-labelledby="dayModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <div id="dayModalWeekday" class="small text-uppercase text-body-secondary fw-semibold"></div>
+                        <h2 id="dayModalTitle" class="modal-title h4 fw-bold"></h2>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="dayModalShift" class="day-detail-shift"></div>
+                    <div id="dayModalHoliday" class="alert alert-danger d-flex align-items-center gap-2 mt-3 mb-0 d-none" role="status"></div>
+                    <div class="mt-3">
+                        <div class="small text-body-secondary fw-semibold mb-2">Próximos dias</div>
+                        <div id="dayModalNext" class="next-days"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
