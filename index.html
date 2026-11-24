@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escala Segurança Metrô SP</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <!-- Aplica o tema antes de desenhar a página, para não piscar em claro -->
     <script>
         (function () {
@@ -121,20 +122,10 @@
             </div>
         </section>
 
-        <!-- Info + legenda -->
-        <section class="row g-2 g-md-3 mb-4">
-            <div class="col-lg-7">
-                <div class="alert alert-warning h-100 mb-0" role="note">
-                    <div class="fw-semibold mb-1"><i class="bi bi-info-circle me-1"></i>Padrão inicial confirmado</div>
-                    <ul class="pattern-list mb-0">
-                        <li><span class="fw-medium">26/05 a 29/05:</span> Manhãs (4 dias)</li>
-                        <li><span class="fw-medium">30/05 a 31/05:</span> Noites (2 dias)</li>
-                        <li><span class="fw-medium">01/06 a 04/06:</span> Folgas (4 dias)</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-5">
-                <div class="card h-100 border-0 shadow-sm">
+        <!-- Legenda -->
+        <section class="row mb-4" aria-label="Legenda">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
                     <div class="card-body d-flex flex-wrap align-items-center justify-content-center gap-2">
                         <span class="legend-chip shift-morning"><i class="bi bi-sun-fill"></i> Manhã</span>
                         <span class="legend-chip shift-night"><i class="bi bi-moon-stars-fill"></i> Noite</span>
